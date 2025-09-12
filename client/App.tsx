@@ -10,6 +10,7 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Checkout from "./pages/Checkout";
 import Orders from "./pages/Orders";
+import Auth from "./pages/Auth";
 import { Provider } from "react-redux";
 import { store } from "@/store";
 
