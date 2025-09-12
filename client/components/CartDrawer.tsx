@@ -6,12 +6,14 @@ import { updateQty, removeFromCart } from "@/features/cart/cartSlice";
 import { formatCurrency } from "@/lib/format";
 import { Link } from "react-router-dom";
 import { useMemo, useState } from "react";
+import { useCartMutations } from "@/services/queries/resto";
 
 export default function CartDrawer({ children }: { children: React.ReactNode }) {
   const items = useAppSelector((s) => s.cart.items);
   const dispatch = useAppDispatch();
   const total = useMemo(() => items.reduce((a, b) => a + b.price * b.qty, 0), [items]);
   const [open, setOpen] = useState(false);
+  const { update, remove } = useCartMutations();
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
@@ -29,10 +31,40 @@ export default function CartDrawer({ children }: { children: React.ReactNode }) 
                 <div className="font-medium line-clamp-1">{it.name}</div>
                 <div className="text-xs text-muted-foreground">{formatCurrency(it.price)} × {it.qty}</div>
                 <div className="flex items-center gap-2 mt-2">
-                  <Button size="icon" variant="outline" onClick={() => dispatch(updateQty({ id: it.id, qty: it.qty - 1 }))}><Minus className="h-4 w-4" /></Button>
+                  <Button
+                    size="icon"
+                    variant="outline"
+                    onClick={() => {
+                      const next = Math.max(1, it.qty - 1);
+                      dispatch(updateQty({ id: it.id, qty: next }));
+                      if (localStorage.getItem("auth_token")) update.mutate({ id: it.id, quantity: next });
+                    }}
+                  >
+                    <Minus className="h-4 w-4" />
+                  </Button>
                   <span className="min-w-6 text-center">{it.qty}</span>
-                  <Button size="icon" variant="outline" onClick={() => dispatch(updateQty({ id: it.id, qty: it.qty + 1 }))}><Plus className="h-4 w-4" /></Button>
-                  <Button size="icon" variant="destructive" className="ml-auto" onClick={() => dispatch(removeFromCart(it.id))}><Trash2 className="h-4 w-4" /></Button>
+                  <Button
+                    size="icon"
+                    variant="outline"
+                    onClick={() => {
+                      const next = it.qty + 1;
+                      dispatch(updateQty({ id: it.id, qty: next }));
+                      if (localStorage.getItem("auth_token")) update.mutate({ id: it.id, quantity: next });
+                    }}
+                  >
+                    <Plus className="h-4 w-4" />
+                  </Button>
+                  <Button
+                    size="icon"
+                    variant="destructive"
+                    className="ml-auto"
+                    onClick={() => {
+                      dispatch(removeFromCart(it.id));
+                      if (localStorage.getItem("auth_token")) remove.mutate(it.id);
+                    }}
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
                 </div>
               </div>
             </div>
