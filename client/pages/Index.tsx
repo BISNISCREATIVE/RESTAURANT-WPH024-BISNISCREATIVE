@@ -82,7 +82,10 @@ export default function Index() {
                 <ProductCard
                   key={String(m.id)}
                   item={{ id: m.id, name: m.name, price: m.price, image: m.image, category: m.category, restaurantId: detail.data.id }}
-                  onAdd={(item) => dispatch(addToCart({ id: item.id, name: item.name, price: item.price, qty: 1, image: item.image, restaurantId: item.restaurantId }))}
+                  onAdd={(item) => {
+                    dispatch(addToCart({ id: item.id, name: item.name, price: item.price, qty: 1, image: item.image, restaurantId: item.restaurantId }));
+                    if (localStorage.getItem("auth_token")) add.mutate({ menuId: item.id, quantity: 1 });
+                  }}
                 />
               ))}
             </div>
