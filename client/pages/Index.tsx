@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { useRestaurantsQuery, useRestaurantDetailQuery } from "@/services/queries/resto";
+import { useRestaurantsQuery, useRestaurantDetailQuery, useCartMutations } from "@/services/queries/resto";
 import { useAppDispatch } from "@/store";
 import { addToCart } from "@/features/cart/cartSlice";
 import CartDrawer from "@/components/CartDrawer";
