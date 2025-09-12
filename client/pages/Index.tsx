@@ -14,6 +14,7 @@ export default function Index() {
   const [q, setQ] = useState("");
   const [selected, setSelected] = useState<number | string | null>(null);
   const dispatch = useAppDispatch();
+  const { add } = useCartMutations();
   const { data, isLoading } = useRestaurantsQuery(q ? { q } : undefined);
   const detail = useRestaurantDetailQuery(selected || undefined);
 
