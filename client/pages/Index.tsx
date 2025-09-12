@@ -1,13 +1,22 @@
 import { useState } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { useRestaurantsQuery, useRestaurantDetailQuery, useCartMutations } from "@/services/queries/resto";
+import {
+  useRestaurantsQuery,
+  useRestaurantDetailQuery,
+  useCartMutations,
+} from "@/services/queries/resto";
 import { useAppDispatch } from "@/store";
 import { addToCart } from "@/features/cart/cartSlice";
 import CartDrawer from "@/components/CartDrawer";
 import RestaurantCard from "@/components/RestaurantCard";
 import ProductCard from "@/components/ProductCard";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 
 export default function Index() {
@@ -31,8 +40,12 @@ export default function Index() {
         <div className="absolute inset-0 bg-black/50" />
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="text-center text-white px-4">
-            <h1 className="text-3xl md:text-5xl font-extrabold mb-2 drop-shadow">Explore Culinary Experiences</h1>
-            <p className="max-w-2xl mx-auto opacity-90">Search and refine your choice to discover the perfect restaurant.</p>
+            <h1 className="text-3xl md:text-5xl font-extrabold mb-2 drop-shadow">
+              Explore Culinary Experiences
+            </h1>
+            <p className="max-w-2xl mx-auto opacity-90">
+              Search and refine your choice to discover the perfect restaurant.
+            </p>
           </div>
         </div>
       </section>
@@ -45,19 +58,31 @@ export default function Index() {
           {isLoading && (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {Array.from({ length: 6 }).map((_, i) => (
-                <div key={i} className="h-28 bg-muted/30 animate-pulse rounded-xl" />
+                <div
+                  key={i}
+                  className="h-28 bg-muted/30 animate-pulse rounded-xl"
+                />
               ))}
             </div>
           )}
           {!isLoading && (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {data?.map((r) => (
-                <RestaurantCard key={String(r.id)} data={r} onClick={() => setSelected(r.id)} />
+                <RestaurantCard
+                  key={String(r.id)}
+                  data={r}
+                  onClick={() => setSelected(r.id)}
+                />
               ))}
             </div>
           )}
           <div className="text-center mt-8">
-            <Button variant="outline" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}>Show More</Button>
+            <Button
+              variant="outline"
+              onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+            >
+              Show More
+            </Button>
           </div>
         </div>
       </main>
@@ -75,16 +100,35 @@ export default function Index() {
           <DialogHeader>
             <DialogTitle>{detail.data?.name || "Restaurant"}</DialogTitle>
           </DialogHeader>
-          {detail.isLoading && <div className="h-28 bg-muted/30 animate-pulse rounded-xl" />}
+          {detail.isLoading && (
+            <div className="h-28 bg-muted/30 animate-pulse rounded-xl" />
+          )}
           {!!detail.data && (
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {(detail.data.menus || []).map((m: any) => (
                 <ProductCard
                   key={String(m.id)}
-                  item={{ id: m.id, name: m.name, price: m.price, image: m.image, category: m.category, restaurantId: detail.data.id }}
+                  item={{
+                    id: m.id,
+                    name: m.name,
+                    price: m.price,
+                    image: m.image,
+                    category: m.category,
+                    restaurantId: detail.data.id,
+                  }}
                   onAdd={(item) => {
-                    dispatch(addToCart({ id: item.id, name: item.name, price: item.price, qty: 1, image: item.image, restaurantId: item.restaurantId }));
-                    if (localStorage.getItem("auth_token")) add.mutate({ menuId: item.id, quantity: 1 });
+                    dispatch(
+                      addToCart({
+                        id: item.id,
+                        name: item.name,
+                        price: item.price,
+                        qty: 1,
+                        image: item.image,
+                        restaurantId: item.restaurantId,
+                      }),
+                    );
+                    if (localStorage.getItem("auth_token"))
+                      add.mutate({ menuId: item.id, quantity: 1 });
                   }}
                 />
               ))}

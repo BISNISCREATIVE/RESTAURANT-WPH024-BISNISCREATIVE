@@ -5,7 +5,8 @@ export default function Footer() {
         <div>
           <div className="text-2xl font-extrabold">Foody</div>
           <p className="text-sm text-muted-foreground mt-3">
-            Enjoy homemade flavors & chef’s signature dishes, freshly prepared every day. Order online or visit our nearest branch.
+            Enjoy homemade flavors & chef’s signature dishes, freshly prepared
+            every day. Order online or visit our nearest branch.
           </p>
         </div>
         <div>

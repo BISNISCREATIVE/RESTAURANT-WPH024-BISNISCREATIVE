@@ -2,7 +2,11 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "../api/axios";
 import type { Restaurant } from "@/types";
 
-export function useRestaurantsQuery(params?: { q?: string; city?: string; sort?: string }) {
+export function useRestaurantsQuery(params?: {
+  q?: string;
+  city?: string;
+  sort?: string;
+}) {
   return useQuery({
     queryKey: ["restaurants", params],
     queryFn: async () => {
@@ -29,7 +33,10 @@ export function useRestaurantDetailQuery(id?: string | number) {
 export function useCartMutations() {
   const qc = useQueryClient();
   const add = useMutation({
-    mutationFn: async (payload: { menuId: number | string; quantity: number }) => {
+    mutationFn: async (payload: {
+      menuId: number | string;
+      quantity: number;
+    }) => {
       const { data } = await axios.post("/cart", payload);
       return data;
     },
@@ -39,7 +46,9 @@ export function useCartMutations() {
   });
   const update = useMutation({
     mutationFn: async (payload: { id: number | string; quantity: number }) => {
-      const { data } = await axios.put(`/cart/${payload.id}`, { quantity: payload.quantity });
+      const { data } = await axios.put(`/cart/${payload.id}`, {
+        quantity: payload.quantity,
+      });
       return data;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ["cart"] }),

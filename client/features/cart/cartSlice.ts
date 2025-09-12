@@ -16,7 +16,10 @@ const slice = createSlice({
       if (found) found.qty += action.payload.qty;
       else state.items.push({ ...action.payload });
     },
-    updateQty: (state, action: PayloadAction<{ id: CartItem["id"]; qty: number }>) => {
+    updateQty: (
+      state,
+      action: PayloadAction<{ id: CartItem["id"]; qty: number }>,
+    ) => {
       const it = state.items.find((i) => i.id === action.payload.id);
       if (it) it.qty = Math.max(1, action.payload.qty);
     },
@@ -32,5 +35,6 @@ const slice = createSlice({
   },
 });
 
-export const { addToCart, updateQty, removeFromCart, clearCart, setCart } = slice.actions;
+export const { addToCart, updateQty, removeFromCart, clearCart, setCart } =
+  slice.actions;
 export default slice.reducer;

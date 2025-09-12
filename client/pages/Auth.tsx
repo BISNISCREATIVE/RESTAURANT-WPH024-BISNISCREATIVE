@@ -18,10 +18,17 @@ export default function Auth() {
     const fd = new FormData(e.currentTarget);
     try {
       if (mode === "login") {
-        const data = await login(String(fd.get("email")), String(fd.get("password")));
+        const data = await login(
+          String(fd.get("email")),
+          String(fd.get("password")),
+        );
         localStorage.setItem("auth_token", data.token);
       } else {
-        const data = await register(String(fd.get("name")), String(fd.get("email")), String(fd.get("password")));
+        const data = await register(
+          String(fd.get("name")),
+          String(fd.get("email")),
+          String(fd.get("password")),
+        );
         localStorage.setItem("auth_token", data.token);
       }
       window.location.href = "/";
@@ -38,8 +45,18 @@ export default function Auth() {
       <main className="flex-1">
         <div className="mx-auto max-w-md px-4 py-10">
           <div className="flex gap-2 mb-6">
-            <Button variant={mode === "login" ? "default" : "outline"} onClick={() => setMode("login")}>Login</Button>
-            <Button variant={mode === "register" ? "default" : "outline"} onClick={() => setMode("register")}>Register</Button>
+            <Button
+              variant={mode === "login" ? "default" : "outline"}
+              onClick={() => setMode("login")}
+            >
+              Login
+            </Button>
+            <Button
+              variant={mode === "register" ? "default" : "outline"}
+              onClick={() => setMode("register")}
+            >
+              Register
+            </Button>
           </div>
           <form className="space-y-4" onSubmit={onSubmit}>
             {mode === "register" && (
@@ -57,7 +74,13 @@ export default function Auth() {
               <Input id="password" name="password" type="password" required />
             </div>
             {error && <div className="text-sm text-red-600">{error}</div>}
-            <Button type="submit" disabled={loading}>{loading ? "Please wait..." : mode === "login" ? "Login" : "Register"}</Button>
+            <Button type="submit" disabled={loading}>
+              {loading
+                ? "Please wait..."
+                : mode === "login"
+                  ? "Login"
+                  : "Register"}
+            </Button>
           </form>
         </div>
       </main>

@@ -59,13 +59,18 @@ export default function Checkout() {
               <Label htmlFor="address">Address</Label>
               <Input id="address" name="address" required />
             </div>
-            <Button type="submit" disabled={items.length === 0}>Place Order</Button>
+            <Button type="submit" disabled={items.length === 0}>
+              Place Order
+            </Button>
           </form>
           <aside className="bg-white rounded-xl border p-4 h-fit">
             <div className="font-semibold mb-2">Order Summary</div>
             <ul className="space-y-2">
               {items.map((it) => (
-                <li key={String(it.id)} className="flex justify-between text-sm">
+                <li
+                  key={String(it.id)}
+                  className="flex justify-between text-sm"
+                >
                   <span>
                     {it.name} × {it.qty}
                   </span>
