@@ -47,6 +47,14 @@ export default function Navbar({
           >
             <User className="h-5 w-5" />
           </Button>
+          {(() => {
+            const authed = !!(localStorage.getItem("auth_token") || sessionStorage.getItem("auth_token"));
+            return !authed ? (
+              <Button variant="outline" onClick={() => nav("/auth")}> <LogIn className="h-4 w-4 mr-1"/> Login</Button>
+            ) : (
+              <Button variant="outline" onClick={() => { localStorage.removeItem("auth_token"); sessionStorage.removeItem("auth_token"); window.location.reload(); }}> <LogOut className="h-4 w-4 mr-1"/> Logout</Button>
+            );
+          })()}
           <Button onClick={onOpenCart} className="relative rounded-full">
             <ShoppingCart className="h-5 w-5" />
             {count > 0 && (
