@@ -1,9 +1,9 @@
-import { ShoppingCart, Search, User } from "lucide-react";
+import { ShoppingCart, Search, User, LogIn, LogOut } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useAppSelector } from "@/store";
 import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function Navbar({
   onOpenCart,
