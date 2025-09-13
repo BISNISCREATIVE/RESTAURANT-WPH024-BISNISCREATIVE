@@ -1,17 +1,25 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "../api/axios";
-import type { Restaurant } from "@/types";
+import type { Restaurant, MenuItem } from "@/types";
 
-export function useRestaurantsQuery(params?: {
-  q?: string;
-  city?: string;
-  sort?: string;
-}) {
+export function useRestaurantsQuery(params?: { q?: string; city?: string; sort?: string }) {
   return useQuery({
     queryKey: ["restaurants", params],
     queryFn: async () => {
-      const { data } = await axios.get<Restaurant[]>("/resto", { params });
-      return data;
+      const res = await axios.get("/resto", { params });
+      const payload = res.data?.data?.restaurants ?? res.data?.data ?? res.data;
+      const list: Restaurant[] = (Array.isArray(payload) ? payload : []).map((r: any) => ({
+        id: r.id,
+        name: r.name,
+        city: r.city ?? r.place ?? null,
+        distance: null,
+        rating: r.rating ?? r.star ?? r.averageRating ?? null,
+        images: r.images ?? [],
+        logo: r.logo ?? null,
+        menuCount: r.menuCount,
+        priceRange: r.priceRange ?? null,
+      }));
+      return list;
     },
     staleTime: 60_000,
   });
@@ -22,8 +30,17 @@ export function useRestaurantDetailQuery(id?: string | number) {
     enabled: !!id,
     queryKey: ["restaurant", id],
     queryFn: async () => {
-      const { data } = await axios.get(`/resto/${id}`);
-      return data as any;
+      const res = await axios.get(`/resto/${id}`);
+      const d = res.data?.data ?? res.data;
+      const normalizedMenus: MenuItem[] = (d?.menus ?? []).map((m: any) => ({
+        id: m.id,
+        name: m.foodName ?? m.name,
+        price: m.price,
+        image: m.image,
+        category: m.type ?? m.category,
+        restaurantId: d.id,
+      }));
+      return { ...d, menus: normalizedMenus } as any;
     },
     staleTime: 60_000,
   });
