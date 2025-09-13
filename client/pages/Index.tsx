@@ -1,31 +1,16 @@
 import { useState } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import {
-  useRestaurantsQuery,
-  useRestaurantDetailQuery,
-  useCartMutations,
-} from "@/services/queries/resto";
-import { useAppDispatch } from "@/store";
-import { addToCart } from "@/features/cart/cartSlice";
+import { useRestaurantsQuery } from "@/services/queries/resto";
 import CartDrawer from "@/components/CartDrawer";
 import RestaurantCard from "@/components/RestaurantCard";
-import ProductCard from "@/components/ProductCard";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
 
 export default function Index() {
   const [q, setQ] = useState("");
-  const [selected, setSelected] = useState<number | string | null>(null);
-  const dispatch = useAppDispatch();
-  const { add } = useCartMutations();
   const { data, isLoading } = useRestaurantsQuery(q ? { q } : undefined);
-  const detail = useRestaurantDetailQuery(selected || undefined);
+  const nav = useNavigate();
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -71,7 +56,7 @@ export default function Index() {
                 <RestaurantCard
                   key={String(r.id)}
                   data={r}
-                  onClick={() => setSelected(r.id)}
+                  onClick={() => nav(`/resto/${r.id}`)}
                 />
               ))}
             </div>
@@ -94,48 +79,6 @@ export default function Index() {
           <Button>Open Cart</Button>
         </CartDrawer>
       </div>
-
-      <Dialog open={!!selected} onOpenChange={(o) => !o && setSelected(null)}>
-        <DialogContent className="max-w-3xl">
-          <DialogHeader>
-            <DialogTitle>{detail.data?.name || "Restaurant"}</DialogTitle>
-          </DialogHeader>
-          {detail.isLoading && (
-            <div className="h-28 bg-muted/30 animate-pulse rounded-xl" />
-          )}
-          {!!detail.data && (
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {(detail.data.menus || []).map((m: any) => (
-                <ProductCard
-                  key={String(m.id)}
-                  item={{
-                    id: m.id,
-                    name: m.name,
-                    price: m.price,
-                    image: m.image,
-                    category: m.category,
-                    restaurantId: detail.data.id,
-                  }}
-                  onAdd={(item) => {
-                    dispatch(
-                      addToCart({
-                        id: item.id,
-                        name: item.name,
-                        price: item.price,
-                        qty: 1,
-                        image: item.image,
-                        restaurantId: item.restaurantId,
-                      }),
-                    );
-                    if (localStorage.getItem("auth_token"))
-                      add.mutate({ menuId: item.id, quantity: 1 });
-                  }}
-                />
-              ))}
-            </div>
-          )}
-        </DialogContent>
-      </Dialog>
     </div>
   );
 }
