@@ -16,75 +16,100 @@ export default function Auth() {
     setLoading(true);
     setError("");
     const fd = new FormData(e.currentTarget);
+    const remember = fd.get("remember") === "on";
     try {
       if (mode === "login") {
         const data = await login(
           String(fd.get("email")),
           String(fd.get("password")),
         );
-        localStorage.setItem("auth_token", data.token);
+        const storage = remember ? localStorage : sessionStorage;
+        storage.setItem("auth_token", data.token);
       } else {
         const data = await register(
           String(fd.get("name")),
           String(fd.get("email")),
           String(fd.get("password")),
         );
-        localStorage.setItem("auth_token", data.token);
+        const storage = remember ? localStorage : sessionStorage;
+        storage.setItem("auth_token", data.token);
       }
       window.location.href = "/";
     } catch (err: any) {
-      setError(err?.response?.data?.message || "Failed");
+      setError(err?.response?.data?.message || "Invalid credentials");
     } finally {
       setLoading(false);
     }
   }
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <Navbar onOpenCart={() => {}} />
-      <main className="flex-1">
-        <div className="mx-auto max-w-md px-4 py-10">
-          <div className="flex gap-2 mb-6">
-            <Button
-              variant={mode === "login" ? "default" : "outline"}
-              onClick={() => setMode("login")}
-            >
-              Login
-            </Button>
-            <Button
-              variant={mode === "register" ? "default" : "outline"}
-              onClick={() => setMode("register")}
-            >
-              Register
-            </Button>
-          </div>
-          <form className="space-y-4" onSubmit={onSubmit}>
-            {mode === "register" && (
-              <div>
-                <Label htmlFor="name">Name</Label>
-                <Input id="name" name="name" required />
+    <div className="min-h-screen grid md:grid-cols-2">
+      <div className="hidden md:block">
+        <img
+          src="https://images.unsplash.com/photo-1550547660-d9450f859349?q=80&w=1200&auto=format&fit=crop"
+          alt="Food visual"
+          className="h-full w-full object-cover"
+        />
+      </div>
+      <div className="flex flex-col">
+        <Navbar onOpenCart={() => {}} />
+        <main className="flex-1 flex items-center">
+          <div className="w-full max-w-md mx-auto px-6">
+            <div className="mb-6">
+              <div className="text-3xl font-extrabold">Welcome Back</div>
+              <div className="text-sm text-muted-foreground">
+                Good to see you again! Let’s eat
               </div>
-            )}
-            <div>
-              <Label htmlFor="email">Email</Label>
-              <Input id="email" name="email" type="email" required />
             </div>
-            <div>
-              <Label htmlFor="password">Password</Label>
-              <Input id="password" name="password" type="password" required />
+            <div className="rounded-2xl bg-muted p-1 flex mb-4">
+              <button
+                className={`flex-1 h-10 rounded-xl ${mode === "login" ? "bg-white font-bold" : "text-muted-foreground"}`}
+                onClick={() => setMode("login")}
+                type="button"
+              >
+                Sign in
+              </button>
+              <button
+                className={`flex-1 h-10 rounded-xl ${mode === "register" ? "bg-white font-bold" : "text-muted-foreground"}`}
+                onClick={() => setMode("register")}
+                type="button"
+              >
+                Sign up
+              </button>
             </div>
-            {error && <div className="text-sm text-red-600">{error}</div>}
-            <Button type="submit" disabled={loading}>
-              {loading
-                ? "Please wait..."
-                : mode === "login"
-                  ? "Login"
-                  : "Register"}
-            </Button>
-          </form>
-        </div>
-      </main>
-      <Footer />
+            <form className="space-y-3" onSubmit={onSubmit}>
+              {mode === "register" && (
+                <div>
+                  <Label htmlFor="name">Name</Label>
+                  <Input id="name" name="name" required />
+                </div>
+              )}
+              <div>
+                <Label htmlFor="email">Email</Label>
+                <Input id="email" name="email" type="email" required />
+                {error && (
+                  <div className="text-xs text-red-600 mt-1">{error}</div>
+                )}
+              </div>
+              <div>
+                <Label htmlFor="password">Password</Label>
+                <Input id="password" name="password" type="password" required />
+                {error && (
+                  <div className="text-xs text-red-600 mt-1">{error}</div>
+                )}
+              </div>
+              <label className="flex items-center gap-2 text-sm">
+                <input type="checkbox" name="remember" className="h-4 w-4" />
+                Remember Me
+              </label>
+              <Button type="submit" className="w-full" disabled={loading}>
+                {loading ? "Please wait..." : mode === "login" ? "Login" : "Register"}
+              </Button>
+            </form>
+          </div>
+        </main>
+        <Footer />
+      </div>
     </div>
   );
 }
