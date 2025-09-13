@@ -103,7 +103,11 @@ export default function Auth() {
                 Remember Me
               </label>
               <Button type="submit" className="w-full" disabled={loading}>
-                {loading ? "Please wait..." : mode === "login" ? "Login" : "Register"}
+                {loading
+                  ? "Please wait..."
+                  : mode === "login"
+                    ? "Login"
+                    : "Register"}
               </Button>
             </form>
           </div>

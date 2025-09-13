@@ -3,7 +3,11 @@ import { formatCurrency } from "@/lib/format";
 import type { MenuItem } from "@/types";
 import { Minus, Plus } from "lucide-react";
 import { useAppDispatch, useAppSelector } from "@/store";
-import { addToCart, updateQty, removeFromCart } from "@/features/cart/cartSlice";
+import {
+  addToCart,
+  updateQty,
+  removeFromCart,
+} from "@/features/cart/cartSlice";
 import { useCartMutations } from "@/services/queries/resto";
 
 export default function ProductCard({
@@ -28,9 +32,10 @@ export default function ProductCard({
         qty: 1,
         image: item.image,
         restaurantId: item.restaurantId,
-      })
+      }),
     );
-    if (localStorage.getItem("auth_token")) add.mutate({ menuId: item.id, quantity: 1 });
+    if (localStorage.getItem("auth_token"))
+      add.mutate({ menuId: item.id, quantity: 1 });
   }
 
   function setQty(next: number) {
@@ -40,7 +45,8 @@ export default function ProductCard({
       return;
     }
     dispatch(updateQty({ id: item.id, qty: next }));
-    if (localStorage.getItem("auth_token")) update.mutate({ id: item.id, quantity: next });
+    if (localStorage.getItem("auth_token"))
+      update.mutate({ id: item.id, quantity: next });
   }
 
   return (
@@ -52,7 +58,9 @@ export default function ProductCard({
       />
       <div className="p-3 space-y-1">
         <div className="font-medium line-clamp-1">{item.name}</div>
-        <div className="text-sm text-muted-foreground">{formatCurrency(item.price)}</div>
+        <div className="text-sm text-muted-foreground">
+          {formatCurrency(item.price)}
+        </div>
         {!found ? (
           <Button className="w-full mt-2" onClick={handleAdd}>
             Add
@@ -66,7 +74,9 @@ export default function ProductCard({
             >
               <Minus className="h-4 w-4" />
             </button>
-            <span className="min-w-8 text-center font-semibold">{found.qty}</span>
+            <span className="min-w-8 text-center font-semibold">
+              {found.qty}
+            </span>
             <button
               className="h-8 w-8 flex items-center justify-center"
               aria-label="increase"
