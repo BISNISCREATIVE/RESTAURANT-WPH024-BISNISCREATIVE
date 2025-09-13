@@ -40,7 +40,14 @@ export function useRestaurantDetailQuery(id?: string | number) {
         category: m.type ?? m.category,
         restaurantId: d.id,
       }));
-      return { ...d, menus: normalizedMenus } as any;
+      const reviews = (d?.reviews ?? []).map((r: any) => ({
+        id: r.id,
+        rating: r.rating ?? r.star ?? null,
+        comment: r.comment ?? r.review ?? "",
+        createdAt: r.createdAt ?? r.date ?? new Date().toISOString(),
+        user: r.user ?? r.author ?? null,
+      }));
+      return { ...d, menus: normalizedMenus, reviews } as any;
     },
     staleTime: 60_000,
   });
