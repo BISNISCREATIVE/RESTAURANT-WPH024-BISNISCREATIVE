@@ -64,7 +64,30 @@ export default function Index() {
       </section>
 
       <main className="flex-1">
-        <div className="mx-auto max-w-6xl px-4 py-10">
+        <div className="mx-auto max-w-6xl px-4 py-8">
+          {/* Categories frame under hero */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4 mb-8">
+            {[
+              { label: "All Restaurant", icon: "https://cdn.builder.io/api/v1/image/assets%2Fcf8594e38e724fa3abfa91ad793c6168%2F50550dcb04e44672b23d54c77002d309?format=webp&width=200" },
+              { label: "Nearby", icon: "https://cdn.builder.io/api/v1/image/assets%2Fcf8594e38e724fa3abfa91ad793c6168%2F76552659ac4c42f99bbffaa0456c0c40?format=webp&width=200" },
+              { label: "Discount", icon: "https://cdn.builder.io/api/v1/image/assets%2Fcf8594e38e724fa3abfa91ad793c6168%2Fceb15bb8649f4feaaf53159c5580b223?format=webp&width=200" },
+              { label: "Best Seller", icon: "https://cdn.builder.io/api/v1/image/assets%2Fcf8594e38e724fa3abfa91ad793c6168%2Fed9e777dad5e449cae345421f9be5565?format=webp&width=200" },
+              { label: "Delivery", icon: "https://cdn.builder.io/api/v1/image/assets%2Fcf8594e38e724fa3abfa91ad793c6168%2F0ec6096d412d4a48ae3922f86dd9cc94?format=webp&width=200" },
+              { label: "Lunch", icon: "https://cdn.builder.io/api/v1/image/assets%2Fcf8594e38e724fa3abfa91ad793c6168%2F898e3b5ac84a48ca9d1c5c6c748848c6?format=webp&width=200" },
+            ].map((c) => (
+              <button
+                key={c.label}
+                onClick={() => setQ(c.label)}
+                className="rounded-2xl bg-white shadow-sm hover:shadow-md transition p-2 flex flex-col items-center gap-1"
+              >
+                <img src={c.icon} alt={c.label} className="h-20 object-contain" />
+                <b className="text-gray-700 text-sm">{c.label}</b>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="mx-auto max-w-6xl px-4 pb-10">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-xl md:text-2xl font-extrabold">Recommended</h2>
           </div>
