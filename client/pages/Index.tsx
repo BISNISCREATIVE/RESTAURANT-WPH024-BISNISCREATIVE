@@ -11,7 +11,9 @@ export default function Index() {
   const [q, setQ] = useState("");
   const [sort, setSort] = useState<string>("");
   const params = { ...(q ? { q } : {}), ...(sort ? { sort } : {}) } as any;
-  const { data, isLoading } = useRestaurantsQuery(Object.keys(params).length ? params : undefined);
+  const { data, isLoading } = useRestaurantsQuery(
+    Object.keys(params).length ? params : undefined,
+  );
   const nav = useNavigate();
   const location = useLocation();
 
@@ -33,7 +35,10 @@ export default function Index() {
         />
         <div className="absolute inset-0 bg-black/40" />
         {/* Sign in / Sign up bubble (only when logged out) */}
-        {!(localStorage.getItem("auth_token") || sessionStorage.getItem("auth_token")) && (
+        {!(
+          localStorage.getItem("auth_token") ||
+          sessionStorage.getItem("auth_token")
+        ) && (
           <div className="absolute right-6 top-6 flex gap-3">
             <a
               href="/auth?mode=login"
@@ -59,11 +64,23 @@ export default function Index() {
             </p>
             <div className="mt-6 max-w-2xl mx-auto">
               <div className="relative">
-                <svg className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 opacity-80" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <svg
+                  className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 opacity-80"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                >
+                  <circle cx="11" cy="11" r="8" />
+                  <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                </svg>
                 <input
                   placeholder="Search restaurants, food and drink"
-                  onChange={(e)=>setQ(e.target.value)}
-                  onKeyDown={(e)=>{ if(e.key==='Enter'){ e.preventDefault(); } }}
+                  onChange={(e) => setQ(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                    }
+                  }}
                   className="w-full h-12 rounded-full pl-12 pr-4 text-black outline-none"
                 />
               </div>
@@ -77,19 +94,47 @@ export default function Index() {
           {/* Categories frame under hero */}
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4 mb-8">
             {[
-              { label: "All Restaurant", icon: "https://cdn.builder.io/api/v1/image/assets%2Fcf8594e38e724fa3abfa91ad793c6168%2Ff3d234f40c0d4f8da8accf41a74b7d66?format=webp&width=200", query: "" },
-              { label: "Nearby", icon: "https://cdn.builder.io/api/v1/image/assets%2Fcf8594e38e724fa3abfa91ad793c6168%2F114b35c3fe2b4f92869f26bca6ec874b?format=webp&width=200", query: "Nearby" },
-              { label: "Discount", icon: "https://cdn.builder.io/api/v1/image/assets%2Fcf8594e38e724fa3abfa91ad793c6168%2F4afe48b5c2bf4028a8b106cd282b058e?format=webp&width=200", query: "Discount" },
-              { label: "Best Seller", icon: "https://cdn.builder.io/api/v1/image/assets%2Fcf8594e38e724fa3abfa91ad793c6168%2F3ebde435ed16403780b9d6d88ee8f9dd?format=webp&width=200", query: "Best Seller" },
-              { label: "Delivery", icon: "https://cdn.builder.io/api/v1/image/assets%2Fcf8594e38e724fa3abfa91ad793c6168%2F0553eea3c52146f6b62da0f34872136a?format=webp&width=200", query: "Delivery" },
-              { label: "Lunch", icon: "https://cdn.builder.io/api/v1/image/assets%2Fcf8594e38e724fa3abfa91ad793c6168%2Fc5bde48b0c644f1ab63e8a8b105117ee?format=webp&width=200", query: "Lunch" },
+              {
+                label: "All Restaurant",
+                icon: "https://cdn.builder.io/api/v1/image/assets%2Fcf8594e38e724fa3abfa91ad793c6168%2Ff3d234f40c0d4f8da8accf41a74b7d66?format=webp&width=200",
+                query: "",
+              },
+              {
+                label: "Nearby",
+                icon: "https://cdn.builder.io/api/v1/image/assets%2Fcf8594e38e724fa3abfa91ad793c6168%2F114b35c3fe2b4f92869f26bca6ec874b?format=webp&width=200",
+                query: "Nearby",
+              },
+              {
+                label: "Discount",
+                icon: "https://cdn.builder.io/api/v1/image/assets%2Fcf8594e38e724fa3abfa91ad793c6168%2F4afe48b5c2bf4028a8b106cd282b058e?format=webp&width=200",
+                query: "Discount",
+              },
+              {
+                label: "Best Seller",
+                icon: "https://cdn.builder.io/api/v1/image/assets%2Fcf8594e38e724fa3abfa91ad793c6168%2F3ebde435ed16403780b9d6d88ee8f9dd?format=webp&width=200",
+                query: "Best Seller",
+              },
+              {
+                label: "Delivery",
+                icon: "https://cdn.builder.io/api/v1/image/assets%2Fcf8594e38e724fa3abfa91ad793c6168%2F0553eea3c52146f6b62da0f34872136a?format=webp&width=200",
+                query: "Delivery",
+              },
+              {
+                label: "Lunch",
+                icon: "https://cdn.builder.io/api/v1/image/assets%2Fcf8594e38e724fa3abfa91ad793c6168%2Fc5bde48b0c644f1ab63e8a8b105117ee?format=webp&width=200",
+                query: "Lunch",
+              },
             ].map((c) => (
               <button
                 key={c.label}
                 onClick={() => nav(`/?q=${encodeURIComponent(c.query)}`)}
                 className="rounded-2xl bg-white shadow-sm hover:shadow-md transition p-2 flex flex-col items-center gap-1"
               >
-                <img src={c.icon} alt={c.label} className="h-20 object-contain" />
+                <img
+                  src={c.icon}
+                  alt={c.label}
+                  className="h-20 object-contain"
+                />
                 <b className="text-gray-700 text-sm">{c.label}</b>
               </button>
             ))}
