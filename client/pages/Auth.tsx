@@ -52,7 +52,7 @@ export default function Auth() {
     <div className="min-h-screen grid md:grid-cols-2">
       <div className="hidden md:block">
         <img
-          src="https://images.unsplash.com/photo-1550547660-d9450f859349?q=80&w=1200&auto=format&fit=crop"
+          src="https://cdn.builder.io/api/v1/image/assets%2Fcf8594e38e724fa3abfa91ad793c6168%2F9dff027f661b4b26834b11a1a7ad91a5?format=webp&width=1200"
           alt="Food visual"
           className="h-full w-full object-cover"
         />
